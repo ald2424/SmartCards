@@ -7,6 +7,13 @@ export interface IFlashcard extends Document {
     category: Schema.Types.ObjectId;
 }
 
+export interface IFlashcardCreation {
+  question: string;
+  shortAnswer: string;
+  longAnswer?: string;
+  category: Schema.Types.ObjectId;
+}
+
  const flashcardSchema = new Schema<IFlashcard>({
     question: {
         type: String,

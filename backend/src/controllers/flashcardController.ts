@@ -26,7 +26,7 @@ export const updateFlashcard = async(req: Request, res: Response) => {
     try{
         const { id } = req.params;
         const { question, shortAnswer, longAnswer, category } = req.body;
-        const flashcard = await Flashcard.findByIdAndUpdate(id, { question, shortAnswer, longAnswer, category });
+        const flashcard = await Flashcard.findByIdAndUpdate(id, { question, shortAnswer, longAnswer, category }, { new: true });
         if(!flashcard){
             return res.status(404).json({ message: 'Flashcard not found.' });
         }
