@@ -1,54 +1,55 @@
-import { Request, Response } from 'express';
-import { Flashcard } from '../models/Flashcard';
+import { Request, Response } from "express";
+import { Flashcard } from "../models/Flashcard";
+import errorHandler from "../middlewares/errorHandler";
 
-export const createFlashcard = async (req: Request, res: Response) => {
-    try {
-        const { question, shortAnswer, longAnswer, category } = req.body;
-        const flashcard = new Flashcard({ question, shortAnswer, longAnswer, category});
-        await flashcard.save();
-        res.status(201).json(flashcard);
-    } catch(error) {
-        res.status(500).json({ message: 'Server error', error });
-    }
-};
+export const createFlashcard = errorHandler(
+  async (req: Request, res: Response) => {
+    const { question, shortAnswer, longAnswer, category } = req.body;
+    const flashcard = new Flashcard({
+      question,
+      shortAnswer,
+      longAnswer,
+      category,
+    });
+    await flashcard.save();
+    res.status(201).json(flashcard);
+  }
+);
 
-export const getFlashcards = async (req: Request, res: Response) => {
-    try {
-        const {categoryId } = req.params;
-        const flashcards = await Flashcard.find({ category: categoryId });
-        res.status(200).json(flashcards);
-    } catch(error) {
-        res.status(500).json({ message: 'Server error', error});
-    }
-};
+export const getFlashcards = errorHandler(
+  async (req: Request, res: Response) => {
+    const { categoryId } = req.params;
+    const flashcards = await Flashcard.find({ category: categoryId });
+    res.status(200).json(flashcards);
+  }
+);
 
-export const updateFlashcard = async(req: Request, res: Response) => {
-    try{
-        const { id } = req.params;
-        const { question, shortAnswer, longAnswer, category } = req.body;
-        const flashcard = await Flashcard.findByIdAndUpdate(id, { question, shortAnswer, longAnswer, category }, { new: true });
-        if(!flashcard){
-            return res.status(404).json({ message: 'Flashcard not found.' });
-        }
-        res.status(200).json(flashcard);
-    } catch(error) {
-        res.status(500).json({ message: 'Server error', error });
+export const updateFlashcard = errorHandler(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { question, shortAnswer, longAnswer, category } = req.body;
+    const flashcard = await Flashcard.findByIdAndUpdate(
+      id,
+      { question, shortAnswer, longAnswer, category },
+      { new: true }
+    );
+    if (!flashcard) {
+      return res.status(404).json({ message: "Flashcard not found." });
     }
-}
+    res.status(200).json(flashcard);
+  }
+);
 
-export const deleteFlashcard = async (req: Request, res: Response) => {
-    try {
-        const { id } = req.params;
-        console.log( `Deleting flashcard with ID: ${id}`);
-        const flashcard = await Flashcard.findByIdAndDelete(id);
-        if(!flashcard) {
-            console.log(`Flashcard not found.`);
-            return res.status(404).json({ message: 'Flashcard not found.' });
-        }
-        console.log(`flashcard deleted: `, flashcard)
-        res.status(200).json({ message: 'Flashcard deleted' });
-    } catch(error) {
-        console.error(`Error deleting flashcard.`, error);
-        res.status(500).json({ message: "Server error", error });
+export const deleteFlashcard = errorHandler(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    console.log(`Deleting flashcard with ID: ${id}`);
+    const flashcard = await Flashcard.findByIdAndDelete(id);
+    if (!flashcard) {
+      console.log(`Flashcard not found.`);
+      return res.status(404).json({ message: "Flashcard not found." });
     }
-}
+    console.log(`flashcard deleted: `, flashcard);
+    res.status(200).json({ message: "Flashcard deleted" });
+  }
+);
