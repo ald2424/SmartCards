@@ -4,11 +4,11 @@ import mongoose from 'mongoose';
 import { createCategory } from './helpers';
 
 beforeAll(async () => {
-   const mongoUri = process.env.Mongo_URI;
-   if (!mongoUri) {
+   const mongoUriTest = process.env.Mongo_URI_TEST;
+   if (!mongoUriTest) {
      throw new Error("Mongo_URI is not defined in the environment variables.");
    }
-  await mongoose.connect(mongoUri);
+  await mongoose.connect(mongoUriTest);
 });
 
 afterAll(async() => {

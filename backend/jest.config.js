@@ -5,4 +5,5 @@ module.exports = {
     "^.+\\.ts$": "ts-jest",
   },
   testMatch: ["**/test/**/*.test.ts"],
+  setupFiles: ["./test/setup.ts"],
 };

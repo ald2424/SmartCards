@@ -12,7 +12,7 @@ let category: ICategory & {_id: ObjectId};
 let flashcardData: IFlashcardCreation;
 
 beforeAll(async () => {
-  const mongoUri = process.env.Mongo_URI;
+  const mongoUri = process.env.Mongo_URI_TEST;
   if (!mongoUri) {
     throw new Error("Mongo_URI is not defined in the environment variables.");
   }
