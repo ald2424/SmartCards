@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
-import { Flashcard } from "../models/Flashcard";
+import Flashcard from "../models/Flashcard";
 import errorHandler from "../middlewares/errorHandler";
+import mongoose from "mongoose";
 
 export const createFlashcard = errorHandler(
   async (req: Request, res: Response) => {
@@ -18,8 +19,13 @@ export const createFlashcard = errorHandler(
 
 export const getFlashcards = errorHandler(
   async (req: Request, res: Response) => {
-    const { categoryId } = req.params;
-    const flashcards = await Flashcard.find({ category: categoryId });
+    const categoryId = req.params.id;
+    console.log(`Fetching flashcards for category ID: ${categoryId}`);
+    const objectId = new mongoose.Types.ObjectId(categoryId);
+    const flashcards = await Flashcard.find({ category: objectId });
+    if(!flashcards) {
+      return res.status(404).json({message: 'No flashcards found for this category.'})
+    }
     res.status(200).json(flashcards);
   }
 );

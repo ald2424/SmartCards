@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Category } from '../models/Category';
+import Category from '../models/Category';
 import errorHandler from "../middlewares/errorHandler";
 
 export const createCategory = errorHandler(async (req: Request, res: Response) => {
@@ -14,7 +14,7 @@ export const getCategories = errorHandler(async (req: Request, res: Response) =>
     res.status(200).json(categories);
 });
 
-export const UpdateCategory = errorHandler(async (req: Request, res: Response) => {
+export const updateCategory = errorHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
     const { name } = req.body;
     const category = await Category.findByIdAndUpdate(id, { name }, {new: true});

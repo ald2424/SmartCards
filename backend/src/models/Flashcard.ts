@@ -1,37 +1,39 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Types} from 'mongoose';
 
-export interface IFlashcard extends Document {
+export interface IFlashcard {
+    _id: Types.ObjectId;
     question: string;
     shortAnswer: string;
     longAnswer?: string;
-    category: Schema.Types.ObjectId;
+    category: Types.ObjectId;
 }
 
 export interface IFlashcardCreation {
   question: string;
   shortAnswer: string;
   longAnswer?: string;
-  category: Schema.Types.ObjectId;
+  category: Types.ObjectId;
 }
 
  const flashcardSchema = new Schema<IFlashcard>({
-    question: {
-        type: String,
-        required: true,
-    },
-    shortAnswer: {
-        type: String,
-        required: true,
-    },
-    longAnswer: {
-        type: String,
-        required: false,
-    },
-    category: { 
-        type: Schema.Types.ObjectId,
-        ref: 'Category',
-        required: true,
-    }
+   question: {
+     type: String,
+     required: true,
+   },
+   shortAnswer: {
+     type: String,
+     required: true,
+   },
+   longAnswer: {
+     type: String,
+     required: false,
+   },
+   category: {
+     type: Schema.Types.ObjectId,
+     ref: "Category",
+     required: true,
+   },
  });
 
- export const Flashcard = model<IFlashcard>('Flashcard', flashcardSchema);
+ const Flashcard = model<IFlashcard>('Flashcard', flashcardSchema);
+ export default Flashcard;

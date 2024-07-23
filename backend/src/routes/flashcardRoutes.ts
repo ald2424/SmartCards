@@ -1,11 +1,22 @@
-import { Router } from 'express';
-import { createFlashcard, getFlashcards, updateFlashcard, deleteFlashcard } from '../controllers/flashcardController';
+import { Router } from "express";
+import {
+  createFlashcard,
+  getFlashcards,
+  updateFlashcard,
+  deleteFlashcard,
+} from "../controllers/flashcardController";
+import { protect } from "../middlewares/authMiddleware";
 
 const router = Router();
 
-router.post('/', createFlashcard);
-router.get('/:categoryId', getFlashcards);
-router.put('/:id', updateFlashcard);
-router.delete('/:id', deleteFlashcard);
+router
+   .route("/")
+   .post(protect, createFlashcard);
+
+router
+  .route("/:id")
+  .get(protect, getFlashcards)
+  .delete(protect, deleteFlashcard)
+  .put(protect, updateFlashcard);
 
 export default router;

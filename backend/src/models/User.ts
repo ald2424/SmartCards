@@ -1,12 +1,12 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
 import bcrypt from "bcryptjs";
 
-export interface IUser extends Document {
+export interface IUser {
     username: string;
     email: string;
     password: string;
-    matchPassword(enteredPassword: string): Promise<boolean>;
-    _id: mongoose.Schema.Types.ObjectId;
+    comparePassword(enteredPassword: string): Promise<boolean>;
+    _id: Types.ObjectId;
 }
 
 const userSchema = new Schema<IUser>({
@@ -27,7 +27,7 @@ const userSchema = new Schema<IUser>({
   },
 });
 
-userSchema.pre<IUser>("save", async function (next) {
+userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     return next();
   }
@@ -40,7 +40,7 @@ userSchema.pre<IUser>("save", async function (next) {
   }
 });
 
-userSchema.methods.matchPassword = async function (enteredPassword: string) {
+userSchema.methods.comparePassword = async function (enteredPassword: string) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 

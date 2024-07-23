@@ -18,17 +18,15 @@ export const registerUser = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "User already exists" });
   }
 
-  const user = new User ({
+  const user = await User.create ({
     username,
     email,
     password,
   });
 
-  await user.save();
-
   if (user) {
     res.status(201).json({
-      _id: user._id.toString(),
+      _id: user._id,
       username: user.username,
       email: user.email,
       token: generateToken(user._id.toString()),
@@ -43,9 +41,9 @@ export const authUser = async (req: Request, res: Response) => {
 
   const user = await User.findOne({ email });
 
-  if (user && (await user.matchPassword(password))) {
+  if (user && (await user.comparePassword(password))) {
     res.json({
-      _id: user._id.toString(),
+      _id: user._id,
       username: user.username,
       email: user.email,
       token: generateToken(user._id.toString()),

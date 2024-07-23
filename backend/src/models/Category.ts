@@ -1,7 +1,8 @@
-import { Schema, model, Document } from 'mongoose';
-import { Flashcard } from './Flashcard';
+import { Schema, model, Types } from 'mongoose';
+import  Flashcard  from './Flashcard';
 
-export interface ICategory extends Document {
+export interface ICategory {
+    _id: Types.ObjectId;
     name: string;
 }
 
@@ -21,4 +22,5 @@ categorySchema.pre('findOneAndDelete', async function (next) {
     next();
 });
 
-export const Category = model<ICategory>('Category', categorySchema);
+ const Category = model<ICategory>('Category', categorySchema);
+ export default Category;
