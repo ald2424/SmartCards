@@ -6,18 +6,13 @@ import { ICategory } from '../src/models/Category';
 import { IFlashcardCreation } from '../src/models/Flashcard';
 
 import dotenv from 'dotenv';
-dotenv.config();
+import connectDB from '../src/config/database';
+dotenv.config({ path: "./.env.test" });
 
 let category: ICategory & {_id: ObjectId};
 let flashcardData: IFlashcardCreation;
 
 beforeAll(async () => {
-  const mongoUri = process.env.Mongo_URI_TEST;
-  if (!mongoUri) {
-    throw new Error("Mongo_URI is not defined in the environment variables.");
-  }
-  await mongoose.connect(mongoUri);
-
   category = await createCategory('Flashcard Test Category') as ICategory & { _id: ObjectId };
 
   flashcardData = {
@@ -29,9 +24,6 @@ beforeAll(async () => {
   };
 });
 
-afterAll(async () => {
-  await mongoose.connection.close();
-});
 
 describe('Flashcard API', () => {
     it('should create a new flashcard', async () => {

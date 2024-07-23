@@ -2,18 +2,10 @@ import request from 'supertest';
 import app  from '../src/app';
 import mongoose from 'mongoose';
 import { createCategory } from './helpers';
+import dotenv from "dotenv";
 
-beforeAll(async () => {
-   const mongoUriTest = process.env.Mongo_URI_TEST;
-   if (!mongoUriTest) {
-     throw new Error("Mongo_URI is not defined in the environment variables.");
-   }
-  await mongoose.connect(mongoUriTest);
-});
+dotenv.config({ path: "./.env.test" });
 
-afterAll(async() => {
-    await mongoose.connection.close();
-})
 
 describe('Category API', () => {
     it('should create a new category', async () => {

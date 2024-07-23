@@ -1,27 +1,22 @@
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import globalErrorHandler from './middlewares/globalErrorHandler';
+import express from "express";
+import dotenv from "dotenv";
 import connectDB from "./config/database";
-import categoryRoutes from './routes/categoryRoutes';
-import flashcardRoutes from './routes/flashcardRoutes';
 
+// Load environment variables from .env file
 dotenv.config();
-
-connectDB();
 
 const app = express();
 
+// Middleware
 app.use(express.json());
-app.use(cors());
 
-app.get('/', (req, res) => {
-    res.send('API is running');
-});
+// Routes
+import authRoutes from "./routes/authRoutes";
+import categoryRoutes from "./routes/categoryRoutes";
+import flashcardRoutes from "./routes/flashcardRoutes";
 
-app.use('/api/categories', categoryRoutes);
-app.use('/api/flashcards', flashcardRoutes);
-
-app.use(globalErrorHandler);
+app.use("/api/auth", authRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/flashcards", flashcardRoutes);
 
 export default app;
